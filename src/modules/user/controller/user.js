@@ -2,14 +2,26 @@ const { prisma } = require('../../../../prisma');
 const httpStatus = require('http-status');
 
 const findAll = async (req, res) => {
+	let { page = 1, limit = 10 } = req.query;
+	// convert page & limit to int
+	page = Number(page);
+	limit = Number(limit);
+
 	try {
-		// find user(s) with profile
+		// TODO: add pagination
+		const skip = limit * (page - 1);
 		const users = await prisma.user.findMany({
 			include: {
 				profile: true
-			}
+			},
+			take: limit,
+			skip
 		});
-		res.json({ code: httpStatus.OK, data: users });
+		const meta = {
+			page,
+			limit
+		};
+		res.json({ code: httpStatus.OK, data: users, meta });
 	} catch (error) {
 		res.json({ code: httpStatus.INTERNAL_SERVER_ERROR, message: error });
 	}
