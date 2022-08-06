@@ -11,5 +11,7 @@ router.get('/users', userController.findAll);
 router.post('/users', validate(userValidation.create), userController.create);
 // updating user by id
 router.put('/users/:userId', validate(userValidation.update), userController.update);
+// get user by id
+router.get('/users/:userId', userController.findOne);
 
 module.exports = router;

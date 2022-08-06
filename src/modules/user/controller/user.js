@@ -90,8 +90,26 @@ const update = async (req, res) => {
 	}
 };
 
+const findOne = async (req, res) => {
+	const { userId } = req.params;
+	try {
+		const user = await prisma.user.findFirst({
+			where: {
+				id: Number(userId)
+			},
+			include: {
+				profile: true
+			}
+		});
+		res.json({ code: httpStatus.OK, data: user });
+	} catch (error) {
+		res.json({ code: httpStatus.INTERNAL_SERVER_ERROR, message: error });
+	}
+};
+
 module.exports = {
 	findAll,
 	create,
-	update
+	update,
+	findOne
 };
