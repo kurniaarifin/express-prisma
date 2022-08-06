@@ -10,19 +10,25 @@ const findAll = async (req, res) => {
 	try {
 		// TODO: add pagination
 		const skip = limit * (page - 1);
-		const users = await prisma.user.findMany({
-			include: {
-				profile: true
-			},
-			take: limit,
-			skip
-		});
+		const [ users, count ] = await prisma.$transaction([
+			prisma.user.findMany({
+					include: {
+						profile: true
+					},
+					take: limit,
+					skip
+				}),
+			prisma.user.count()
+		])
+		// console.log(count)
 		const meta = {
+			count,
 			page,
 			limit
 		};
 		res.json({ code: httpStatus.OK, data: users, meta });
 	} catch (error) {
+		console.log(error)
 		res.json({ code: httpStatus.INTERNAL_SERVER_ERROR, message: error });
 	}
 };
