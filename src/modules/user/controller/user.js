@@ -12,14 +12,18 @@ const findAll = async (req, res) => {
 		const skip = limit * (page - 1);
 		const [ users, count ] = await prisma.$transaction([
 			prisma.user.findMany({
-					include: {
-						profile: true
-					},
-					take: limit,
-					skip
-				}),
+				include: {
+					profile: {
+						select: {
+							bio: true
+						}
+					}
+				},
+				take: limit,
+				skip
+			}),
 			prisma.user.count()
-		])
+		]);
 		// console.log(count)
 		const meta = {
 			count,
@@ -28,7 +32,6 @@ const findAll = async (req, res) => {
 		};
 		res.json({ code: httpStatus.OK, data: users, meta });
 	} catch (error) {
-		console.log(error)
 		res.json({ code: httpStatus.INTERNAL_SERVER_ERROR, message: error });
 	}
 };
@@ -54,7 +57,11 @@ const create = async (req, res) => {
 							id: result.id
 						},
 						include: {
-							profile: true
+							profile: {
+								select: {
+									bio: true
+								}
+							}
 						}
 					});
 				}
@@ -97,7 +104,11 @@ const update = async (req, res) => {
 							id: Number(userId)
 						},
 						include: {
-							profile: true
+							profile: {
+								select: {
+									bio: true
+								}
+							}
 						}
 					});
 				}
@@ -116,7 +127,11 @@ const findOne = async (req, res) => {
 				id: Number(userId)
 			},
 			include: {
-				profile: true
+				profile: {
+					select: {
+						bio: true
+					}
+				}
 			}
 		});
 		res.json({ code: httpStatus.OK, data: user });
