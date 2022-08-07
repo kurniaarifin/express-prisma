@@ -133,6 +133,9 @@ const findOne = async (req, res) => {
 				}
 			}
 		});
+		if (!user) {
+			return res.json({ code: httpStatus.NOT_FOUND, message: `User with id ${userId} not found`, data: {}});
+		}
 		res.json({ code: httpStatus.OK, message: `Success get user with id ${userId}`,data: user });
 	} catch (error) {
 		res.json({ code: httpStatus.INTERNAL_SERVER_ERROR, message: error });
