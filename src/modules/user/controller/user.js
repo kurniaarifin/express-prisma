@@ -24,13 +24,12 @@ const findAll = async (req, res) => {
 			}),
 			prisma.user.count()
 		]);
-		// console.log(count)
 		const meta = {
 			count,
 			page,
 			limit
 		};
-		res.json({ code: httpStatus.OK, data: users, meta });
+		res.json({ code: httpStatus.OK, message: `Success get user(s)`, data: users, meta });
 	} catch (error) {
 		res.json({ code: httpStatus.INTERNAL_SERVER_ERROR, message: error });
 	}
@@ -66,7 +65,7 @@ const create = async (req, res) => {
 					});
 				}
 			});
-		res.json({ code: httpStatus.OK, data: user });
+		res.json({ code: httpStatus.OK, message: `Success create user`, data: user });
 	} catch (error) {
 		res.json({ code: httpStatus.INTERNAL_SERVER_ERROR, message: error });
 	}
@@ -113,7 +112,7 @@ const update = async (req, res) => {
 					});
 				}
 			});
-		res.json({ code: httpStatus.OK, data: user });
+		res.json({ code: httpStatus.OK, message: `Success updating user with id ${userId}`, data: user });
 	} catch (error) {
 		res.json({ code: httpStatus.INTERNAL_SERVER_ERROR, message: error });
 	}
@@ -134,9 +133,25 @@ const findOne = async (req, res) => {
 				}
 			}
 		});
-		res.json({ code: httpStatus.OK, data: user });
+		res.json({ code: httpStatus.OK, message: `Success get user with id ${userId}`,data: user });
 	} catch (error) {
 		res.json({ code: httpStatus.INTERNAL_SERVER_ERROR, message: error });
+	}
+};
+
+const destroy = async (req, res) => {
+	const { userId } = req.params;
+	try {
+		// destroy user
+		await prisma.user.delete({
+			where: {
+				id: Number(userId)
+			}
+		});
+		res.json({ code: httpStatus.OK, message: `Success deleting user with id ${userId}`,data: {} });
+	} catch (error) {
+		console.log(error)
+		res.json({ code: httpStatus.OK, message: error });
 	}
 };
 
@@ -144,5 +159,6 @@ module.exports = {
 	findAll,
 	create,
 	update,
-	findOne
+	findOne,
+	destroy
 };

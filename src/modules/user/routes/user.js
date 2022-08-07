@@ -13,5 +13,7 @@ router.post('/users', validate(userValidation.create), userController.create);
 router.put('/users/:userId', validate(userValidation.update), userController.update);
 // get user by id
 router.get('/users/:userId', userController.findOne);
+// delete user
+router.delete('/users/:userId', userController.destroy);
 
 module.exports = router;
