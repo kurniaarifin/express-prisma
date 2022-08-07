@@ -29,24 +29,38 @@ describe('User api test', () => {
 				return done();
 			});
 	});
-    const updatePayload = {
-        name: 'updating user has been successfully'
-    };
-    test('PUT /users/:userId', (done) => {
-        request(app)
-        .put('/users/2')
-        .expect('Content-Type', /json/)
-        .send(updatePayload)
-        .expect(200)
-        .expect((res) => {
-            // expect returned data is object 
-            expect(typeof res.body.data === 'object' && res.body.data !== null).toBe(true);
-            // expect returned data:name sama as update payload name
-            expect(res.body.data.name === updatePayload.name).toBe(true);
-        })
-        .end((err, res) => {
-            if (err) return done(err);
-            return done()
-        })
-    })
+	const updatePayload = {
+		name: 'updating user has been successfully'
+	};
+	test('PUT /users/:userId', (done) => {
+		request(app)
+			.put('/users/2')
+			.expect('Content-Type', /json/)
+			.send(updatePayload)
+			.expect(200)
+			.expect((res) => {
+				// expect returned data is object
+				expect(typeof res.body.data === 'object' && res.body.data !== null).toBe(true);
+				// expect returned data:name sama as update payload name
+				expect(res.body.data.name === updatePayload.name).toBe(true);
+			})
+			.end((err, res) => {
+				if (err) return done(err);
+				return done();
+			});
+	});
+	test('DELETE /users/:userId', (done) => {
+		request(app)
+			.delete('/users/2')
+			.expect('Content-Type', /json/)
+			.expect(200)
+			.expect((res) => {
+				// expect returned data is object
+				expect(typeof res.body.data === 'object' && res.body.data !== null).toBe(true);
+			})
+			.end((err, res) => {
+				if (err) return done(err);
+				return done();
+			});
+	});
 });
