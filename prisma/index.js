@@ -6,9 +6,7 @@ const prisma = new PrismaClient();
 const authenticate = (async () => {
 	try {
 		await prisma.$connect();
-		console.log('db connection has been successfully!');
 	} catch (error) {
-		console.error('db connection failed!', error);
 		await prisma.$disconnect();
 		process.exit(1);
 	}
